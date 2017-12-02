@@ -1,23 +1,24 @@
-package com.kelan;
+package org.sselab;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboard;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.client.RestTemplate;
 
-/**
- * Created by xd031 on 2017/9/26.
- * 8502,8503,8504
- * http://localhost:15672/#/
- */
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableHystrix
 @EnableHystrixDashboard
-public class Client1Application {
+@EnableHystrix
+public class ClientApplication {
   public static void main(String[] args) {
-    SpringApplication application = new SpringApplication(Client1Application.class);
-    application.run();
+    SpringApplication.run(ClientApplication.class, args);
+  }
+
+  @Bean
+  public RestTemplate getRestTemplate() {
+    return new RestTemplate();
   }
 }

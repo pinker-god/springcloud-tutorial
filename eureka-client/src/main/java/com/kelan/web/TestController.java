@@ -2,6 +2,7 @@ package com.kelan.web;
 
 import com.kelan.entity.DataSourceConfig;
 import com.kelan.service.TestService;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +14,6 @@ import java.util.List;
  * Created by xd031 on 2017/9/26.
  */
 @RestController
-@RefreshScope
 public class TestController {
 
   @Autowired
@@ -21,13 +21,19 @@ public class TestController {
 
 
   @GetMapping("/hello")
+
   public String test(@RequestParam String name) {
     return "hello" + name + "->" + testService.getConfig().getPort();
   }
 
   @GetMapping("/config")
+  @HystrixCommand(defaultFallback = "errorConfig")
   public DataSourceConfig config() {
     return testService.getConfig();
+  }
+
+  public DataSourceConfig errorConfig() {
+    return new DataSourceConfig("error", "error", "error", "error", "error");
   }
 
   @PostMapping("/config")

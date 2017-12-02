@@ -1,6 +1,7 @@
 package com.kelan.web;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.kelan.Client1Application;
 import com.kelan.entity.DataSourceConfig;
 import org.junit.Test;
@@ -62,6 +63,7 @@ public class TestControllerTest {
     String unexpected = "{\"driver\":\"com.mysql.jdbc.Driver\",\"password\":\"password123456\",\"url\":\"jdbc:mysql://DEVIP:PORT/DBNAME?characterEncoding\\u003dUTF-8\",\"username\":\"username123456\",\"port\":\"0\"}";
     assertNotEquals(expected, new Gson().toJson(result));
     assertEquals(unexpected, new Gson().toJson(result));
+    System.out.println(new GsonBuilder().disableHtmlEscaping().create().toJson(result));
   }
 
   /**
@@ -184,12 +186,5 @@ public class TestControllerTest {
     HttpStatus status = restTemplate.exchange(URL+"?id=\"1\"", HttpMethod.DELETE, entity, Object.class).getStatusCode();
     assertTrue(status.is2xxSuccessful());
   }
-  @Test
-  public void testConfigWithRestForDelete1() throws Exception {
-    DataSourceConfig dataSource = new DataSourceConfig("hs", "hs", "hs", "hs", "hs");
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
-    HttpEntity<DataSourceConfig> entity = new HttpEntity<DataSourceConfig>(dataSource, headers);
-    System.out.println(restTemplate.exchange(URL+"/{id}", HttpMethod.DELETE, entity, Object.class,"1").getBody());
-  }
 }
+
